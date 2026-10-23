@@ -37,7 +37,7 @@ jobs:
           cmp artifacts/SHA256SUMS "$RUNNER_TEMP/inlay-sha256"
           cd artifacts
           sha256sum --check SHA256SUMS
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-assets
           path: |
@@ -46,7 +46,7 @@ jobs:
             artifacts/SHA256SUMS
           if-no-files-found: error
           retention-days: 7
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: release-failure-report
