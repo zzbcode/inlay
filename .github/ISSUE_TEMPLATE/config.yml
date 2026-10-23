@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Private security report / 私密安全报告
+    url: https://github.com/zzbcode/inlay/security/advisories/new
+    about: Report security vulnerabilities privately. Do not attach private files to public issues.

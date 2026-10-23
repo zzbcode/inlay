@@ -1,0 +1,9 @@
+services:
+  inlay:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    volumes:
+      - ../dist:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "127.0.0.1:8766:80"

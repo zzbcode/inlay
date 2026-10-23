@@ -1,0 +1,23 @@
+name: Feature request / 功能建议
+description: Describe a specific workflow and desired result / 描述使用场景与目标
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you solving? / 想解决什么问题？
+      description: Describe your workflow without sharing personal files.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior / 希望的行为
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and compatibility / 其他方案与兼容考虑
+      description: Does this affect raw bytes, local-only operation, file recovery or browser support?

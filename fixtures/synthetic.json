@@ -1,0 +1,7 @@
+{
+  "carrierName": "synthetic-carrier.png",
+  "carrierBase64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jZP8AAAAASUVORK5CYII=",
+  "payloadName": "合成载荷.bin",
+  "payloadLength": 1048593,
+  "payloadByteRule": "byte[i] = i % 256"
+}

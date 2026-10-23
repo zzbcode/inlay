@@ -1,0 +1,76 @@
+name: Release Inlay
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require a matching version tag
+        run: node --input-type=module -e 'import fs from "node:fs"; const p = JSON.parse(fs.readFileSync("package.json", "utf8")); if (process.env.GITHUB_REF_NAME !== `v${p.version}` || process.env.GITHUB_REF_TYPE !== "tag") throw new Error("Run this workflow on a tag matching package.json");'
+      - run: npm ci
+      - run: npm test
+      - run: npm run format:check
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: npm run test:browser
+      - name: Build and verify reproducible release
+        run: |
+          npm run release
+          cp artifacts/SHA256SUMS "$RUNNER_TEMP/inlay-sha256"
+          npm run release
+          cmp artifacts/SHA256SUMS "$RUNNER_TEMP/inlay-sha256"
+          cd artifacts
+          sha256sum --check SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: |
+            artifacts/inlay-*-offline.zip
+            artifacts/inlay-*-source.zip
+            artifacts/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: release-failure-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-assets
+          path: artifacts
+      - name: Publish verified assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" artifacts/inlay-*-offline.zip artifacts/inlay-*-source.zip artifacts/SHA256SUMS --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" artifacts/inlay-*-offline.zip artifacts/inlay-*-source.zip artifacts/SHA256SUMS --verify-tag --title "Inlay $GITHUB_REF_NAME" --notes-file .github/RELEASE_NOTES.md
+          fi

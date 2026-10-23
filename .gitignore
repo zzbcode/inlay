@@ -1,0 +1,14 @@
+node_modules/
+.DS_Store
+test-results/
+*.zip
+dist/
+.openai/
+design-exploration/
+design-qa.md
+independent-test-report.md
+deployment-report.md
+artifacts/
+playwright-report/
+__pycache__/
+*.pyc

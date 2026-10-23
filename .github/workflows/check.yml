@@ -1,0 +1,63 @@
+name: Check Inlay
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  unit:
+    name: Unit and interoperability / Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: npm test
+      - run: npm run format:check
+      - run: npm run build
+      - run: node --check dist/app.js
+      - name: Verify reproducible archives
+        run: |
+          npm run release
+          cp artifacts/SHA256SUMS "$RUNNER_TEMP/inlay-sha256"
+          npm run release
+          cmp artifacts/SHA256SUMS "$RUNNER_TEMP/inlay-sha256"
+          cd artifacts
+          sha256sum --check SHA256SUMS
+  browser:
+    name: Chromium, Firefox, WebKit and mobile
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: npm run test:browser
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-failure-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

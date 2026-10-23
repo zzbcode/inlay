@@ -1,0 +1,6 @@
+src/vendor/
+dist/
+artifacts/
+node_modules/
+playwright-report/
+test-results/

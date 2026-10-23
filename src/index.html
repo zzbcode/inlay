@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#10212c" />
+    <meta
+      name="description"
+      content="夹层 Inlay：在浏览器本地合并隐藏与提取文件，兼容 Python gap 偏移量算法，无需上传。"
+    />
+    <title>夹层 Inlay · 本地文件工作台</title>
+    <link rel="icon" href="assets/inlay-logo.png" type="image/png" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="vendor/sha256.js" defer></script>
+    <script src="integrity.js" defer></script>
+    <script src="core.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳转到文件工作区</a>
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="夹层 Inlay 首页"
+        ><img src="assets/inlay-logo.png" alt="" width="52" height="52" /><span
+          >夹层 <b>Inlay</b></span
+        ></a
+      ><span class="brand-divider"></span
+      ><span class="tagline">本地文件工作台</span>
+      <nav>
+        <a
+          href="https://github.com/zzbcode/inlay"
+          class="home-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub ↗</a
+        ><button id="load-demo" class="text-button" type="button">
+          载入示例</button
+        ><button id="help" class="text-button" type="button">
+          使用说明 <img src="assets/icons/help.svg" alt="" />
+        </button>
+      </nav>
+    </header>
+    <div class="app-shell">
+      <nav class="sidebar" aria-label="文件操作">
+        <div
+          class="mode-tabs"
+          role="tablist"
+          aria-label="工作模式"
+          aria-orientation="vertical"
+        >
+          <button
+            id="merge-tab"
+            class="mode active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="workspace"
+          >
+            <img src="assets/icons/link.svg" alt="" /><span>合并</span></button
+          ><button
+            id="extract-tab"
+            class="mode"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="workspace"
+            tabindex="-1"
+          >
+            <img src="assets/icons/extract.svg" alt="" /><span>提取</span>
+          </button>
+        </div>
+        <button id="reset" class="reset text-button" type="button">
+          <img src="assets/icons/reset.svg" alt="" />清空工作区
+        </button>
+      </nav>
+      <main id="main" tabindex="-1">
+        <div
+          id="workspace"
+          class="workspace"
+          role="tabpanel"
+          aria-labelledby="merge-tab"
+        >
+          <section class="input-column">
+            <div class="section-heading">
+              <h1 id="heading">合并文件</h1>
+              <p id="description">按原始字节顺序拼接，保留完整内容。</p>
+            </div>
+            <section class="input-files" aria-labelledby="files-title">
+              <h2 id="files-title">输入文件</h2>
+              <div class="file-list">
+                <label id="carrier-zone" class="file-row" for="carrier"
+                  ><input
+                    id="carrier"
+                    type="file"
+                    aria-label="选择载体文件"
+                  /><span class="file-icon green"
+                    ><img src="assets/icons/image.svg" alt="" /></span
+                  ><span class="file-details"
+                    ><strong>载体文件</strong
+                    ><span class="filename">点击选择或拖入文件</span></span
+                  ><span class="file-size">—</span
+                  ><span class="choose-label">选择</span></label
+                >
+                <label id="payload-zone" class="file-row" for="payload"
+                  ><input
+                    id="payload"
+                    type="file"
+                    aria-label="选择隐藏文件"
+                  /><span class="file-icon lavender"
+                    ><img src="assets/icons/archive.svg" alt="" /></span
+                  ><span class="file-details"
+                    ><strong>隐藏文件</strong
+                    ><span class="filename">支持任意文件格式</span></span
+                  ><span class="file-size">—</span
+                  ><span class="choose-label">选择</span></label
+                >
+                <label id="combined-zone" class="file-row" for="combined" hidden
+                  ><input
+                    id="combined"
+                    type="file"
+                    aria-label="选择合并文件"
+                  /><span class="file-icon green"
+                    ><img src="assets/icons/file.svg" alt="" /></span
+                  ><span class="file-details"
+                    ><strong>合并文件</strong
+                    ><span class="filename">选择需要提取的原始文件</span></span
+                  ><span class="file-size">—</span
+                  ><span class="choose-label">选择</span></label
+                >
+              </div>
+              <div id="import-area" class="import-area" hidden>
+                <label class="import-button" for="recipe-input"
+                  ><img
+                    src="assets/icons/upload.svg"
+                    alt="" />导入提取说明<input
+                    id="recipe-input"
+                    type="file"
+                    accept=".json,application/json"
+                    aria-label="导入 JSON 提取说明"
+                /></label>
+                <p id="import-status">
+                  自动填入偏移量与原文件名，或在右侧手动填写。
+                </p>
+              </div>
+            </section>
+            <section class="structure" aria-labelledby="structure-title">
+              <h2 id="structure-title">字节组成示意</h2>
+              <div class="bar-labels">
+                <span>载体</span><span>隐藏内容</span>
+              </div>
+              <div
+                class="byte-bar"
+                role="img"
+                aria-label="选择文件后显示载体与隐藏内容的字节比例"
+              >
+                <div id="carrier-bar"></div>
+                <div id="payload-bar"></div>
+              </div>
+              <div class="byte-ticks">
+                <span>0</span><span id="gap-tick">gap</span
+                ><span id="end-tick">EOF</span>
+              </div>
+              <p id="structure-note">选择两份文件后，即可预览字节结构。</p>
+            </section>
+          </section>
+          <aside class="output-column" aria-labelledby="output-title">
+            <h2 id="output-title">输出设置</h2>
+            <form id="operation-form" novalidate>
+              <label class="field-label" for="output-name" id="name-label"
+                >合并后文件名</label
+              >
+              <div class="name-input">
+                <input
+                  id="output-name"
+                  type="text"
+                  maxlength="240"
+                  placeholder="选择载体后自动填写"
+                  autocomplete="off"
+                  spellcheck="false"
+                /><span id="extension" hidden>.png</span>
+              </div>
+              <div class="gap-field">
+                <label class="field-label" for="gap"
+                  >提取偏移量 <span id="gap-auto">自动计算</span></label
+                >
+                <div class="gap-input">
+                  <input
+                    id="gap"
+                    type="text"
+                    inputmode="numeric"
+                    readonly
+                    placeholder="—"
+                    autocomplete="off"
+                    spellcheck="false"
+                    aria-describedby="gap-help"
+                  /><span>B</span
+                  ><button
+                    id="copy-gap"
+                    type="button"
+                    aria-label="复制提取偏移量"
+                    title="复制提取偏移量"
+                  >
+                    <img src="assets/icons/copy.svg" alt="" />
+                  </button>
+                </div>
+                <p id="gap-help" class="input-help">
+                  等于载体原始大小，提取时需要使用。
+                </p>
+              </div>
+              <dl class="file-stats">
+                <div>
+                  <dt id="payload-size-label">隐藏文件大小</dt>
+                  <dd id="payload-size">—</dd>
+                </div>
+                <div>
+                  <dt id="total-size-label">合并后大小</dt>
+                  <dd id="total-size">—</dd>
+                </div>
+              </dl>
+              <label id="recipe-option" class="checkbox"
+                ><input id="include-recipe" type="checkbox" checked /><span
+                  >生成提取说明与 SHA-256 校验</span
+                ></label
+              >
+              <button id="submit" class="primary" type="submit">
+                生成合并文件
+              </button>
+              <p class="untouched">原文件不会被修改。</p>
+              <div id="processing" class="processing" role="status" hidden>
+                <p id="processing-label">正在计算 SHA-256…</p>
+                <progress
+                  id="processing-progress"
+                  max="1"
+                  value="0"
+                  aria-label="文件校验进度"
+                ></progress
+                ><button id="cancel" class="text-button" type="button">
+                  取消处理
+                </button>
+              </div>
+            </form>
+            <div id="error" class="error" role="alert" hidden></div>
+            <section
+              id="result"
+              class="result"
+              aria-live="polite"
+              aria-labelledby="result-title"
+              hidden
+            >
+              <div class="result-heading">
+                <img src="assets/icons/check.svg" alt="" />
+                <h3 id="result-title" tabindex="-1">文件已就绪</h3>
+              </div>
+              <p id="result-meta"></p>
+              <p id="result-verification" class="verification"></p>
+              <a id="download-result" class="download-button" download
+                ><img src="assets/icons/download.svg" alt="" /><span
+                  >下载合并文件</span
+                ></a
+              ><a id="download-recipe" class="secondary" download
+                >下载提取说明</a
+              ><button id="reuse-result" class="secondary" type="button" hidden>
+                用此结果验证提取
+              </button>
+              <p id="result-note"></p>
+            </section>
+          </aside>
+        </div>
+      </main>
+    </div>
+    <footer class="statusbar">
+      <span><img src="assets/icons/check.svg" alt="" />本地处理 · 无需上传</span
+      ><span><img src="assets/icons/layers.svg" alt="" />仅隐藏，不加密</span>
+    </footer>
+    <dialog id="help-dialog" aria-labelledby="help-title">
+      <div class="dialog-top">
+        <h2 id="help-title">关于夹层 Inlay</h2>
+        <button id="close-help" type="button" aria-label="关闭使用说明">
+          <img src="assets/icons/close.svg" alt="" />
+        </button>
+      </div>
+      <p>把一份文件追加到另一份文件末尾，需要时按偏移量取回。</p>
+      <ol>
+        <li>
+          <strong>合并：</strong
+          >选择载体与隐藏文件，生成后分别下载结果和提取说明。
+        </li>
+        <li>
+          <strong>保存参数：</strong>偏移量 gap
+          等于原始载体大小。请保留提取说明，避免忘记参数。
+        </li>
+        <li>
+          <strong>提取：</strong>选择合并文件，导入说明，或手动填写 gap
+          和原文件名（含扩展名）。
+        </li>
+      </ol>
+      <div class="help-note">
+        这不是密码加密。部分载体追加后可能无法正常打开；压缩、编辑或转码可能丢弃隐藏内容，传输时请发送原文件。新版提取说明包含隐藏文件的
+        SHA-256，可检查还原内容是否一致；旧说明和手动提取会显示“未校验”。摘要不能证明发送者身份，请通过可信渠道保存提取说明。
+      </div>
+      <p class="help-foot">
+        兼容原 Python encode / decode
+        算法；支持旧版叠藏提取说明。文件不会上传或存入浏览器数据库。<br /><a
+          href="https://github.com/zzbcode/inlay"
+          target="_blank"
+          rel="noopener noreferrer"
+          >查看 GitHub 源码、离线包与项目文档 ↗</a
+        >
+      </p>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </body>
+</html>
