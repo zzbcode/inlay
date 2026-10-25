@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "private": true,
   "license": "MIT",
-  "description": "夹层 Inlay · 浏览器本地文件隐藏与提取工作台",
+  "description": "夹层 Inlay · 所有文件皆可隐藏｜本地文件隐藏、文件拼接与无损提取 · Local-first file hider",
   "engines": {
     "node": ">=20"
   },
@@ -27,5 +27,17 @@
   "devDependencies": {
     "@playwright/test": "1.64.1",
     "prettier": "3.9.10"
-  }
+  },
+  "keywords": [
+    "file-hiding",
+    "file-hider",
+    "data-hiding",
+    "file-concatenation",
+    "steganography",
+    "local-first",
+    "offline-first",
+    "client-side",
+    "sha256",
+    "python"
+  ]
 }

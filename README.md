@@ -1,12 +1,29 @@
-# 夹层 · Inlay
+# 夹层 Inlay · 所有文件皆可隐藏
 
-**一份载体，另一层内容。** 在浏览器本地追加、取出文件，并用独立说明核对结果。
+**本地文件隐藏与无损提取工具 · Hide any file locally.**
 
-[English](README.en.md) · [在线使用](https://82.156.103.223/inlay/) · [下载离线包](https://github.com/zzbcode/inlay/releases/latest) · [报告问题](https://github.com/zzbcode/inlay/issues)
+[在线体验](https://82.156.103.223/inlay/) · [下载离线包](https://github.com/zzbcode/inlay/releases/latest) · [English](README.en.md) · [使用与格式说明](docs/FORMAT.md) · [报告问题](https://github.com/zzbcode/inlay/issues)
+
+[![自动化测试](https://github.com/zzbcode/inlay/actions/workflows/check.yml/badge.svg)](https://github.com/zzbcode/inlay/actions/workflows/check.yml)
+
+把 ZIP、PDF、文档或任意二进制文件追加到另一份文件末尾，再按偏移量原样取回。**无需上传 · 离线可用 · SHA-256 校验 · Python CLI**，在浏览器里完成文件拼接、隐藏与提取。
+
+“所有文件”指**待隐藏文件的类型不限**；载体能否继续正常打开、可处理的大小，仍取决于文件格式、读取器与浏览器。**文件隐藏不是加密。**
+
+![文件隐藏与还原的字节流程](docs/overview.svg)
+
+**30 秒试用：** 打开在线体验 →「载入示例」→「生成合并文件」→「用此结果验证提取」→ 查看 SHA-256 校验结果。无需准备文件或注册账号。
+
+如果这个小工具对你有用，欢迎 [Star 收藏](https://github.com/zzbcode/inlay)，或把使用场景和兼容性反馈留在 [Issues](https://github.com/zzbcode/inlay/issues)。
+
+<details>
+<summary>查看完整工作台截图</summary>
 
 ![Inlay 深色工作台](docs/screenshot.png)
 
-Inlay 把载荷文件的原始字节追加到载体文件末尾。输出仍是 `载体 + 载荷`，兼容简单的 Python 拼接与 `seek(gap)` 提取。**这是文件拼接与隐藏工具，不是加密工具。**
+</details>
+
+输出是精确的 `carrier + payload` 原始字节拼接，兼容 Python 的追加写入与 `seek(gap)` 提取。它采用 append-based data hiding（文件追加式隐藏 / steganography），不改变载荷字节。
 
 ## 能做什么
 
@@ -100,3 +117,7 @@ docker compose -f deploy/compose.yml up -d
 欢迎使用合成样例提交问题，先阅读[贡献指南](CONTRIBUTING.md)。漏洞请通过[安全政策](SECURITY.md)中的私密渠道报告，勿在公开 issue 上传私人文件。
 
 代码采用 [MIT](LICENSE) 许可；本地依赖与品牌素材来源见[素材说明](docs/ASSETS.md)。后续计划见[路线图](docs/ROADMAP.md)。
+
+## 分享项目
+
+欢迎把它介绍给需要本地文件隐藏、图片藏文件、文件拼接或离线文件工具的朋友。[分享素材与可复制介绍](docs/SHARING.md)包含中文介绍、英文介绍和短演示脚本。介绍时请保留“追加式隐藏，非加密；载体兼容性需验证”的边界。

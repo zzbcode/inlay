@@ -1,12 +1,29 @@
-# Inlay · 夹层
+# Inlay · Hide any file locally
 
-**One carrier, another layer.** Append and extract files locally in your browser, with a separate recipe for checking the result.
+**A local-first file hider for arbitrary payload types.**
 
-[中文](README.md) · [Live app](https://82.156.103.223/inlay/) · [Offline downloads](https://github.com/zzbcode/inlay/releases/latest) · [Issues](https://github.com/zzbcode/inlay/issues)
+[Try online](https://82.156.103.223/inlay/) · [Offline downloads](https://github.com/zzbcode/inlay/releases/latest) · [中文](README.md) · [Format specification](docs/FORMAT.md) · [Issues](https://github.com/zzbcode/inlay/issues)
+
+[![Checks](https://github.com/zzbcode/inlay/actions/workflows/check.yml/badge.svg)](https://github.com/zzbcode/inlay/actions/workflows/check.yml)
+
+Append a ZIP, PDF, document or any other binary payload to a carrier file, then extract the exact bytes. **No uploads · Offline use · SHA-256 verification · Python CLI.** File hiding, data hiding and byte concatenation happen in your browser.
+
+“Any file” refers to the **payload type**. Carrier readability and supported size depend on the format, reader and browser. **File hiding is not encryption.**
+
+![Append a payload and recover its original bytes](docs/overview.svg)
+
+**Try it in 30 seconds:** open the live app → click “载入示例” (load demo) → “生成合并文件” (combine) → “用此结果验证提取” (verify extraction) → inspect the SHA-256 result. The current app UI is Chinese; this README and the Python CLI documentation are available in English. No signup or input files are needed for the demo.
+
+If you find it useful, [star the repository](https://github.com/zzbcode/inlay) or share your use case and compatibility feedback in [Issues](https://github.com/zzbcode/inlay/issues).
+
+<details>
+<summary>View the full workspace screenshot</summary>
 
 ![Inlay dark workspace](docs/screenshot.png)
 
-Inlay creates an exact byte concatenation, `carrier + payload`. It works with the original Python approach: append bytes, then extract using `seek(gap)`. **File hiding is not encryption.**
+</details>
+
+The output is exact byte concatenation, `carrier + payload`, compatible with Python append operations and `seek(gap)`. This is append-based data hiding / steganography, preserving the payload bytes.
 
 ## Features
 
@@ -98,3 +115,7 @@ The example server serves static assets only. Browser-selected files are not upl
 Read [CONTRIBUTING.md](CONTRIBUTING.md), use synthetic reproducers, and report vulnerabilities privately through [SECURITY.md](SECURITY.md). Do not upload personal files to public issues.
 
 Code is [MIT licensed](LICENSE). See [asset notices](docs/ASSETS.md) and the [roadmap](docs/ROADMAP.md).
+
+## Share Inlay
+
+The [sharing kit](docs/SHARING.md) contains copy-ready descriptions and a short demo script. Keep the boundaries clear: append-based hiding, no encryption, and carrier compatibility must be checked.

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="330" viewBox="0 0 1200 330" role="img" aria-labelledby="title desc">
+  <title id="title">Inlay — hide any file locally</title>
+  <desc id="desc">Append a carrier and a payload without changing their bytes, then recover the payload using the saved offset and verify its SHA-256. No upload. Hiding is not encryption.</desc>
+  <rect width="1200" height="330" rx="20" fill="#14252f"/>
+  <g font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+    <text x="40" y="52" fill="#f3f7f8" font-size="27" font-weight="700">夹层 Inlay · 所有文件皆可隐藏</text>
+    <text x="40" y="83" fill="#a9bec8" font-size="17">LOCAL FILE HIDING · NO UPLOAD · OFFLINE · SHA-256</text>
+    <rect x="40" y="116" width="206" height="117" rx="12" fill="#203640" stroke="#42626e"/>
+    <text x="62" y="151" fill="#67d2c0" font-size="19" font-weight="600">载体 / Carrier</text>
+    <text x="62" y="182" fill="#d8e4e8" font-size="15">PNG · PDF · …</text>
+    <text x="62" y="210" fill="#a9bec8" font-size="14">size = gap</text>
+    <text x="264" y="185" fill="#c7d6dd" font-size="30">+</text>
+    <rect x="300" y="116" width="206" height="117" rx="12" fill="#20323f" stroke="#665e81"/>
+    <text x="322" y="151" fill="#c4b4ed" font-size="19" font-weight="600">隐藏文件 / Payload</text>
+    <text x="322" y="182" fill="#d8e4e8" font-size="15">ZIP · TXT · any type</text>
+    <text x="322" y="210" fill="#a9bec8" font-size="14">original bytes</text>
+    <path d="M530 174h48m-12-10 12 10-12 10" fill="none" stroke="#67d2c0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="602" y="116" width="263" height="117" rx="12" fill="#203640" stroke="#42626e"/>
+    <text x="624" y="151" fill="#f3f7f8" font-size="19" font-weight="600">合并 / Combined</text>
+    <rect x="624" y="173" width="119" height="24" rx="3" fill="#67d2c0"/>
+    <rect x="743" y="173" width="100" height="24" rx="3" fill="#bfb0e3"/>
+    <text x="624" y="218" fill="#a9bec8" font-size="14">[carrier][payload]</text>
+    <path d="M888 174h48m-12-10 12 10-12 10" fill="none" stroke="#67d2c0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="960" y="116" width="200" height="117" rx="12" fill="#20323f" stroke="#665e81"/>
+    <text x="982" y="151" fill="#c4b4ed" font-size="19" font-weight="600">还原 / Extracted</text>
+    <text x="982" y="182" fill="#d8e4e8" font-size="15">same payload bytes</text>
+    <text x="982" y="210" fill="#67d2c0" font-size="14">SHA-256 verified</text>
+    <text x="40" y="276" fill="#d8e4e8" font-size="17">保存偏移量与提取说明 / Keep the offset and recipe.</text>
+    <text x="40" y="305" fill="#a9bec8" font-size="14">任意载荷类型；载体可读性与大小受格式、读取器和浏览器限制。Hiding ≠ encryption.</text>
+  </g>
+</svg>
